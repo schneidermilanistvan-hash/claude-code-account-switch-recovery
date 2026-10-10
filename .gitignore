@@ -1,0 +1,11 @@
+# Toolkit output and backups. They can contain session ids, artifact URLs and secrets.
+ids.txt
+artifacts.json
+folders.json
+tasks.json
+*.jsonl
+/*.html
+rebuilt/
+claude-backup-*/
+.DS_Store
+__pycache__/

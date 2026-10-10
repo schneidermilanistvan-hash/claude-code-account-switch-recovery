@@ -1,0 +1,12 @@
+{
+  "name": "workspace-switch-recovery",
+  "description": "Unofficial recovery toolkit for Claude Code after an account, plan or workspace switch (not affiliated with Anthropic)",
+  "owner": { "name": "schneidermilanistvan-hash" },
+  "plugins": [
+    {
+      "name": "workspace-switch-recovery",
+      "source": "./",
+      "description": "Recover sessions, sidebar folders, scheduled tasks and artifacts after a workspace switch. Unofficial."
+    }
+  ]
+}

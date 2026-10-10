@@ -1,0 +1,26 @@
+# Claude Code workspace switch recovery
+
+> Recover Claude Code desktop sessions, sidebar folders, scheduled tasks (Routines) and published artifacts after switching Claude account, plan or workspace (Pro/Max to Team, one login in two organizations). Unofficial, not affiliated with Anthropic. Tested on macOS, desktop build 2.31226.x, Claude Code 2.1.284-2.1.295, 2026-10-10.
+
+Works only while the transcripts exist in ~/.claude/projects. Key facts: the desktop app keeps one session list per workspace under ~/Library/Application Support/Claude/claude-code-sessions/<accountUuid>/<orgUuid>/; "Import Claude Code CLI Sessions..." skips sessions any workspace knows ("No CLI sessions to import"); `open "claude://resume?session=<id>"` imports a transcript into the workspace on screen (`claude --desktop --resume <id>`, 2.1.285+, opens the same link; untested across workspaces); deleting a sidebar session on 2.1.284+ also deletes its transcript. Back up first, dry-run first, delete nothing (not the old account either while its login is also the Team seat), and never share transcripts: they can contain secrets. Start with the README.
+
+## Guide
+
+- [README](https://github.com/schneidermilanistvan-hash/claude-code-account-switch-recovery/blob/main/README.md): symptoms, step-by-step recovery, official options, checklist
+- [Diagnose](https://raw.githubusercontent.com/schneidermilanistvan-hash/claude-code-account-switch-recovery/main/docs/01-diagnose.md): find the workspace folders and transcripts
+- [Sessions](https://raw.githubusercontent.com/schneidermilanistvan-hash/claude-code-account-switch-recovery/main/docs/02-sessions.md): claude://resume import, why the built-in import finds nothing
+- [Folders](https://raw.githubusercontent.com/schneidermilanistvan-hash/claude-code-account-switch-recovery/main/docs/03-folders.md): dframe-group-scopes, recreating sidebar folders
+- [Routines](https://raw.githubusercontent.com/schneidermilanistvan-hash/claude-code-account-switch-recovery/main/docs/04-routines.md): scheduled tasks per workspace
+- [Artifacts](https://raw.githubusercontent.com/schneidermilanistvan-hash/claude-code-account-switch-recovery/main/docs/05-artifacts.md): inventory and rebuild from transcripts and file-history
+- [403 and other machines](https://raw.githubusercontent.com/schneidermilanistvan-hash/claude-code-account-switch-recovery/main/docs/06-auth-machines-connectors.md): oauth_org_not_allowed, second computer, connectors
+- [Before you switch](https://raw.githubusercontent.com/schneidermilanistvan-hash/claude-code-account-switch-recovery/main/docs/07-before-you-switch.md): retention, backup checklist
+
+## Agent skill
+
+- [SKILL.md](https://raw.githubusercontent.com/schneidermilanistvan-hash/claude-code-account-switch-recovery/main/skills/workspace-switch-recovery/SKILL.md): step-by-step procedure for an agent, with safety rules
+- [ccrecover.py](https://raw.githubusercontent.com/schneidermilanistvan-hash/claude-code-account-switch-recovery/main/tools/ccrecover.py): standard-library toolkit, read-only unless --apply/--out
+
+## Optional
+
+- [FAQ](https://raw.githubusercontent.com/schneidermilanistvan-hash/claude-code-account-switch-recovery/main/docs/faq.md)
+- [Case study](https://raw.githubusercontent.com/schneidermilanistvan-hash/claude-code-account-switch-recovery/main/CASE-STUDY.md): 161 sessions, 9 folders, 4 routines, 51 artifacts
