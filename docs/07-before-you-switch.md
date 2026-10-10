@@ -61,8 +61,10 @@ days earlier. That is not evidence of a sweep.
    permanent now.
 5. **List your connectors** and everything that runs `claude -p` on a schedule (cron, launchd,
    scripts).
-6. **Ask the Team Owner** whether Claude Code with subscription sign-in is enabled for the
-   organization. If not, every `claude -p` will return `oauth_org_not_allowed`.
+6. **Plan to sign the CLI in again** with `claude auth login` on every machine right after the
+   switch, and re-test `claude -p "say ok"`. A CLI that keeps the old workspace's token returns
+   `oauth_org_not_allowed` once that plan lapses. Also ask the Team Owner whether Claude Code with
+   subscription sign-in is enabled for the organization.
 7. **List every machine** where you use Claude Code. Each one needs the same steps.
 8. **Finish running sessions.** Switching workspace stops them mid-turn.
 9. **Know your options.** Keep both accounts, or bring your data into the Team workspace (one-way,

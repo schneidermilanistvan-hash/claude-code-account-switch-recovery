@@ -76,9 +76,12 @@ change that, and deleting them destroys their transcripts (see the TL;DR). Detai
 ### `Your organization has disabled Claude subscription access for Claude Code · Use an Anthropic API key instead, or ask your admin to enable access`
 
 Headless runs (`claude -p`, the Agent SDK, scripts, cron or launchd jobs) fail with this 403. In `-p`
-mode and the SDK the error code is `oauth_org_not_allowed`. It is a server-side setting of the
-organization the CLI is signed in to. Local settings, environment variables and `/login` with the
-same account do not change it. Go to [Step 6](#step-6-headless-runs-and-the-403).
+mode and the SDK the error code is `oauth_org_not_allowed`. Check the cheap cause first: the CLI
+keeps its own login token, and after a switch it can still hold the OLD workspace's token. If that
+workspace's plan no longer includes Claude Code (a personal plan that lapsed to Free), every headless
+run gets this 403, even while `claude auth status` already names the new workspace. `claude auth
+login` fixes that case. Only if the 403 survives a fresh login is it the organization's server-side
+setting. Go to [Step 6](#step-6-headless-runs-and-the-403).
 
 ### Scheduled tasks (Routines) stopped running
 
@@ -298,15 +301,20 @@ Details and the method behind the rebuild: [docs/05-artifacts.md](docs/05-artifa
 
 ```bash
 claude -p "say ok"        # does it return the oauth_org_not_allowed 403?
-claude                     # then type /status to see which account and workspace the CLI uses
+claude auth login         # sign in again in a real terminal; pick the new workspace if asked
+claude auth status        # orgName and subscriptionType should now name the new workspace
+claude -p "say ok"        # re-test: this, not auth status, is the proof
 ```
 
 Fixes, in order:
 
-1. If the CLI is signed in to the wrong workspace, `/login` again and pick the one you want, if the
-   sign-in offers a choice.
-2. If it is the right workspace, an Owner of that organization has to allow Claude Code with a
-   subscription login. No local setting can override it.
+1. Sign the CLI in again with `claude auth login` and re-test `claude -p`. Do this even if
+   `claude auth status` or `/status` already shows the new workspace: in the case study one Mac's
+   status named the new workspace (with the old plan type, `max`) while every run still failed, and
+   the 403 went away only after a fresh login. The second Mac's status showed the old workspace. A
+   fresh login fixed both.
+2. If the 403 survives a fresh login into the right workspace, an Owner of that organization has to
+   allow Claude Code with a subscription login. No local setting can override it.
 3. Or use a Console API key instead of the subscription (billed separately).
 
 Check every script, cron job and launchd job that calls `claude -p`; they fail quietly. Details:
@@ -314,7 +322,7 @@ Check every script, cron job and launchd job that calls `claude -p`; they fail q
 
 ### Step 7: Other machines, connectors and the Chrome extension
 
-- **Other machines:** repeat Steps 0 to 5 on each one. Run `/status` and `/login` in the CLI there too.
+- **Other machines:** repeat Steps 0 to 5 on each one. Run `claude auth login` there too, then re-test `claude -p "say ok"`.
 - **Connectors** are per workspace. Reconnect each one you use in the new workspace.
 - **The Chrome extension** is signed in to one workspace. Sign it in to the one you use now.
 
@@ -397,7 +405,7 @@ Team plan. Result: two workspaces on one login.
 | Sidebar folders | 9 | 9, same order |
 | Scheduled tasks | 6 (2 finished one-offs) | 4 recreated with the same schedule |
 | Published artifacts | 51 | 51: 21 from sources on disk, 24 rebuilt from file backups and replayed edits, 1 from a saved copy in a transcript, 3 from another Mac's transcripts, 1 by re-running its build script, 1 kept private after the owner reviewed it |
-| `claude -p` | 403 `oauth_org_not_allowed` | needs the Owner setting or an API key |
+| `claude -p` | 403 `oauth_org_not_allowed` | fixed by a fresh `claude auth login` on both Macs (one still visibly held the old workspace's token) |
 
 An import scan in the app's log on 2026-10-01 counted 893 transcripts and found 1 importable; scans on
 the recovery day found 3. None of the sidebar sessions can appear there. Full write-up:

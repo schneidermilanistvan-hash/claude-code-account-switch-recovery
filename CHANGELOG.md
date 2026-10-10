@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 - 2026-10-10
+
+- Corrected the 403 (`oauth_org_not_allowed`) advice. In the case study a fresh `claude auth login`
+  fixed it on both Macs; one of them visibly still held the old (lapsed) workspace's token. `claude auth status` can name the new workspace while the
+  token is still the old one, so `claude -p "say ok"` after a fresh login is the proof. The Owner
+  setting and an API key stay as the fallbacks.
+
 ## 1.0.0 - 2026-10-10
 
 - Guide: symptoms with exact error strings, step-by-step recovery, official options, before-you-switch

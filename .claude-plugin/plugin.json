@@ -1,7 +1,7 @@
 {
   "name": "workspace-switch-recovery",
   "displayName": "Workspace Switch Recovery",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Recover Claude Code desktop sessions, sidebar folders, scheduled tasks and published artifacts after switching account, plan or workspace (e.g. Max to Team). Unofficial; not affiliated with Anthropic.",
   "author": { "name": "schneidermilanistvan-hash" },
   "homepage": "https://github.com/schneidermilanistvan-hash/claude-code-account-switch-recovery",

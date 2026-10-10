@@ -58,8 +58,10 @@ from the transcript. [05-artifacts.md](05-artifacts.md).
 
 ### What does `Your organization has disabled Claude subscription access for Claude Code` mean?
 
-The organization the CLI is signed in to does not allow Claude Code with a subscription login
-(`oauth_org_not_allowed`). An Owner has to change it, or you use an API key.
+The organization the CLI's token belongs to does not allow Claude Code with a subscription login
+(`oauth_org_not_allowed`). After a switch that is often the OLD workspace: run `claude auth login`,
+pick the new one and re-test `claude -p "say ok"`. Only if it still fails does an Owner have to change
+the setting, or you use an API key.
 [06-auth-machines-connectors.md](06-auth-machines-connectors.md).
 
 ### Does Anthropic's "Bring your data with you" migration move Code tab sessions?

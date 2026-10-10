@@ -20,7 +20,7 @@ Unofficial; not affiliated with or endorsed by Anthropic.
 | Sidebar folders gone | Stored per workspace |
 | Scheduled tasks stopped | Per-workspace scheduler; fires only for the workspace on screen |
 | Published artifacts unreachable from the Team workspace | Artifacts belong to the workspace that published them |
-| Every `claude -p` returned 403 `oauth_org_not_allowed` | Server-side organization setting |
+| Every `claude -p` returned 403 `oauth_org_not_allowed` | The CLI's own login was stale: one Mac's token visibly still belonged to the old (lapsed) workspace, the other's status named the new one anyway; a fresh `claude auth login` fixed both |
 | A second Mac's CLI still on the old workspace | CLI login is per machine |
 | One connector in daily use missing | Connectors are per workspace |
 
@@ -34,7 +34,7 @@ Unofficial; not affiliated with or endorsed by Anthropic.
 | Scheduled tasks | 6 | 4 recreated, same schedule | the app's create-scheduled-task tool; 2 finished one-offs dropped; 1 had been replaced by a launchd job meanwhile and was restored so the two do not race |
 | Artifacts | 51 | 51 re-published, new URLs | see below |
 | Connector | 1 in use | reconnected | by hand |
-| `claude -p` | 403 | needs the Owner setting or an API key | see [docs/06](docs/06-auth-machines-connectors.md) |
+| `claude -p` | 403 | works again on both Macs | `claude auth login`, then `claude -p "say ok"` as the proof; see [docs/06](docs/06-auth-machines-connectors.md) |
 
 Artifacts in detail:
 

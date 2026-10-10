@@ -165,10 +165,12 @@ New URLs are unavoidable. Old ones stay with the old workspace.
 
 ## Step 6: Headless 403, other machines, connectors
 
-- `claude -p "say ok"` returning `oauth_org_not_allowed`: run `/status` to see the CLI's workspace.
-  Wrong workspace: `/login`. Right workspace: an Owner must enable Claude Code subscription access,
-  or the user sets up a Console API key. You cannot fix it locally.
-- Ask about other machines. Each needs steps 0 to 5 and its own `/login`.
+- `claude -p "say ok"` returning `oauth_org_not_allowed`: first have the user run `claude auth login`
+  in a real terminal (their own sign-in; never do it for them) and pick the new workspace, then
+  re-test `claude -p`. The CLI often still holds the old workspace's token, and `claude auth status`
+  can name the new workspace anyway, so the re-test is the proof. Only if the 403 survives a fresh
+  login: an Owner must enable Claude Code subscription access, or the user sets up a Console API key.
+- Ask about other machines. Each needs steps 0 to 5 and its own `claude auth login`.
 - Remind the user to reconnect connectors and sign the Chrome extension in to the new workspace.
 
 ## Report

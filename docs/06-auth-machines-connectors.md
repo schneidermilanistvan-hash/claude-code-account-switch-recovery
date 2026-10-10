@@ -22,19 +22,32 @@ Per the [official errors page](https://code.claude.com/docs/en/errors#your-organ
 - Fix: an admin enables Claude Code access for the organization, or you authenticate with a Console
   API key instead of the subscription.
 
+That describes an organization that really has Claude Code switched off. After a workspace switch
+there is a cheaper cause with the same message: the CLI keeps its own login token, and it can still
+hold the OLD workspace's token. If that workspace's plan no longer includes Claude Code (a personal
+plan that lapsed to Free), every headless run returns this 403.
+
+In the case study (2026-10-10) a fresh `claude auth login` fixed it on both Macs. On the second Mac
+`claude auth status` showed the old workspace: its token visibly still belonged there. On the first
+Mac it already showed the new workspace's name, but with the old plan type (`max`), while every run
+still failed. After the login `claude -p "say ok"` answered `ok` on both, also from a launchd job.
+Whether anyone changed an admin setting in between is not known, so treat the login as the first
+thing to try, not as proof that the setting never matters.
+
 Steps:
 
-1. Find out which workspace the CLI uses. Start `claude` and type `/status`.
-2. If it is the wrong one and your login belongs to several, run `/login` and pick the right one, if
-   the sign-in offers a choice.
-3. If it is the right one, ask an Owner of that organization to enable Claude Code with subscription
-   sign-in. I did not verify the exact name of that setting in the admin console.
-4. Or set up a Console API key ([authentication docs](https://code.claude.com/docs/en/authentication)).
+1. Sign the CLI in again: `claude auth login`, pick the new workspace if the sign-in asks. Then
+   re-test with `claude -p "say ok"`. Do not trust `claude auth status` or `/status` alone: the
+   re-test is the proof.
+2. If the 403 survives a fresh login into the right workspace, ask an Owner of that organization to
+   enable Claude Code with subscription sign-in. I did not verify the exact name of that setting in
+   the admin console.
+3. Or set up a Console API key ([authentication docs](https://code.claude.com/docs/en/authentication)).
    API usage is billed separately from the subscription.
 
 Then check every script and scheduled job that calls `claude -p`. They fail quietly: look at their
 logs, not at the app. In the case study the desktop app's Code tab worked in the new workspace while
-every headless run returned this 403.
+every headless run returned this 403, until the CLI was signed in again.
 
 ## Other machines
 
